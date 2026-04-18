@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Yanah | Hire a Private Chef</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-container {
+            background: var(--white);
+            border-radius: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--grey);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .chef-summary {
+            background: #FFF1EF;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .chef-summary h4 {
+            font-size: 14px;
+            color: var(--grey);
+            margin-bottom: 8px;
+        }
+        
+        .chef-summary p {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .chef-summary .chef-specialty-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 75, 43, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .guest-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .guest-btn {
+            background: var(--light);
+            border: 1px solid #e2e8f0;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .guest-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .guest-input {
+            width: 100px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .btn-cancel {
+            flex: 1;
+            background: var(--light);
+            color: var(--dark);
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-confirm {
+            flex: 1;
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-confirm:hover {
+            background: #25D366;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .modal-container {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .modal-header h3 {
+                font-size: 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+        
+        /* Responsive Navigation */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: var(--white);
+                flex-direction: column;
+                padding: 20px;
+                transition: left 0.3s ease;
+                box-shadow: var(--shadow);
+                z-index: 999;
+                gap: 0;
+                display: flex !important;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links a {
+                padding: 16px;
+                font-size: 18px;
+                border-bottom: 1px solid #e2e8f0;
+                width: 100%;
+                display: block;
+            }
+            
+            .nav-btns {
+                gap: 12px;
+            }
+            
+            .btn-primary {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
+        }
+        
+        /* Hero Section Mobile */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                padding: 100px 5% 50px;
+                min-height: auto;
+                text-align: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            
+            .hero-image {
+                display: none;
+            }
+        }
+        
+        /* Chefs Grid Mobile */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .dish-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .hire-btn {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+        
+        /* FAQ Mobile */
+        @media (max-width: 768px) {
+            .faq-question {
+                font-size: 15px;
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <a href="index.html" class="logo">Yanah</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+            <i data-lucide="menu" size="24"></i>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Menu</a>
+            <a href="index.html#menuSection">Order Food</a>
+            <a href="hiring.html" class="active">Hire a Chef</a>
+        </div>
+        <div class="nav-btns">
+            <a href="index.html" class="btn-login">← Back</a>
+            <button class="btn-primary" id="browseChefsBtn">Browse Chefs</button>
+        </div>
+    </nav>
+
+    <!-- Hiring Hero Section -->
+    <section class="hero" style="min-height: auto; padding-top: 100px;">
+        <div class="hero-content">
+            <h1>Hire a <span>Private Chef</span></h1>
+            <p>Transform your home into a gourmet restaurant. Our professional chefs specialize in Chinese, Korean, and Western cuisines.</p>
+            <div class="hero-stats">
+                <div class="stat"><span>12+</span> Expert Chefs</div>
+                <div class="stat"><span>6</span> Cuisines</div>
+                <div class="stat"><span>500+</span> Happy Clients</div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=800&q=80" 
+                 alt="Professional Chef">
+        </div>
+    </section>
+
+    <!-- Hiring Modal -->
+    <div class="modal-overlay" id="hiringModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Hire a Private Chef</h3>
+                <button class="modal-close" onclick="closeHiringModal()">
+                    <i data-lucide="x" size="24"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="chef-summary" id="chefSummary">
+                    <h4>Selected Chef</h4>
+                    <p id="selectedChefName">-</p>
+                    <span id="chefSpecialtyBadge" class="chef-specialty-badge">-</span>
+                </div>
+                
+                <form id="hiringForm">
+                    <div class="form-group">
+                        <label>Your Name *</label>
+                        <input type="text" id="customerName" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number (WhatsApp) *</label>
+                        <input type="tel" id="customerPhone" placeholder="e.g., 250788123456" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Number of Guests *</label>
+                        <div class="guest-control">
+                            <button type="button" class="guest-btn" onclick="changeGuests(-1)">-</button>
+                            <input type="number" id="guestCount" class="guest-input" value="4" min="1" max="50" readonly>
+                            <button type="button" class="guest-btn" onclick="changeGuests(1)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Event Date *</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Event Time *</label>
+                        <select id="eventTime" required>
+                            <option value="12:00 PM">12:00 PM (Lunch)</option>
+                            <option value="1:00 PM">1:00 PM (Lunch)</option>
+                            <option value="2:00 PM">2:00 PM (Late Lunch)</option>
+                            <option value="5:00 PM">5:00 PM (Early Dinner)</option>
+                            <option value="6:00 PM">6:00 PM (Dinner)</option>
+                            <option value="7:00 PM">7:00 PM (Dinner)</option>
+                            <option value="8:00 PM">8:00 PM (Late Dinner)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Event Location (Address) *</label>
+                        <textarea id="eventLocation" placeholder="Full address where the chef should come" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Event Type</label>
+                        <select id="eventType">
+                            <option value="Private Dinner">Private Dinner</option>
+                            <option value="Birthday Party">Birthday Party</option>
+                            <option value="Anniversary">Anniversary</option>
+                            <option value="Corporate Event">Corporate Event</option>
+                            <option value="Family Gathering">Family Gathering</option>
+                            <option value="Cooking Class">Cooking Class</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Special Requests (optional)</label>
+                        <textarea id="specialRequests" placeholder="Dietary restrictions, preferred dishes, allergies, etc..."></textarea>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeHiringModal()">Cancel</button>
+                        <button type="button" class="btn-confirm" onclick="submitHiringRequest()">Send Request →</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- How Hiring Works -->
+    <section class="process-section" style="background: var(--light);">
+        <h2>How Hiring Works</h2>
+        <div class="process-grid">
+            <div class="process-card">
+                <i data-lucide="user-search"></i>
+                <h3>1. Browse Chefs</h3>
+                <p>Explore our curated list of professional chefs</p>
+            </div>
+            <div class="process-card">
+                <i data-lucide="message-circle"></i>
+                <h3>2. Click "Hire"</h3>
+                <p>Fill in your event details in the popup form</p>
+            </div>
+            <div class="process-card">
+                <i data-lucide="chef-hat"></i>
+                <h3>3. Chef Responds</h3>
+                <p>Chef will contact you via WhatsApp to discuss menu & pricing</p>
+            </div>
+            <div class="process-card">
+                <i data-lucide="wallet"></i>
+                <h3>4. Pay via MoMo</h3>
+                <p>Secure Mobile Money payment after agreement</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chefs Grid -->
+    <section class="menu-section" id="chefsSection" style="background: var(--white);">
+        <div class="section-header">
+            <h2>Our Expert Chefs</h2>
+            <p style="color: var(--grey);">Book your favorite chef for a private dining experience</p>
+        </div>
+        <div class="menu-grid">
+            <!-- Chef 1 - Chinese Master -->
+            <div class="dish-card">
+                <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=800&q=80'); background-position: top;">
+                    <span class="dish-cuisine-badge">🥢 Chinese Master</span>
+                </div>
+                <div class="dish-info">
+                    <div class="dish-header">
+                        <h3>Lin Wei</h3>
+                        <div class="rating">
+                            <i data-lucide="star" size="14" fill="currentColor"></i>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <p class="dish-desc">20+ years experience in Michelin-starred restaurants. Specializes in hand-pulled noodles and Peking duck.</p>
+                    <div class="dish-meta">
+                        <span>✨ Private dinners · Classes · Banquets</span>
+                        <button class="hire-btn" data-chef-name="Lin Wei" data-chef-specialty="Chinese Cuisine Expert" data-chef-exp="20+ years" data-chef-cuisine="Chinese" data-wa="250788123456">Hire →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chef 2 - Korean BBQ Specialist -->
+            <div class="dish-card">
+                <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=800&q=80'); background-position: top;">
+                    <span class="dish-cuisine-badge">🇰🇷 Korean BBQ</span>
+                </div>
+                <div class="dish-info">
+                    <div class="dish-header">
+                        <h3>Hae-Won Park</h3>
+                        <div class="rating">
+                            <i data-lucide="star" size="14" fill="currentColor"></i>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <p class="dish-desc">Authentic Korean royal cuisine, homemade kimchi, and interactive table-top BBQ experiences.</p>
+                    <div class="dish-meta">
+                        <span>🔥 Bulgogi · Galbi · Banchan</span>
+                        <button class="hire-btn" data-chef-name="Hae-Won Park" data-chef-specialty="Korean BBQ Specialist" data-chef-exp="15+ years" data-chef-cuisine="Korean" data-wa="250788987654">Hire →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chef 3 - Western Gourmet -->
+            <div class="dish-card">
+                <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1600880292203-757bb62b4b92?auto=format&fit=crop&w=800&q=80'); background-position: top;">
+                    <span class="dish-cuisine-badge">🥩 Western Cuisine</span>
+                </div>
+                <div class="dish-info">
+                    <div class="dish-header">
+                        <h3>James Carrington</h3>
+                        <div class="rating">
+                            <i data-lucide="star" size="14" fill="currentColor"></i>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <p class="dish-desc">Trained in Paris & New York. Creates unforgettable tasting menus: dry-aged steaks and truffle risotto.</p>
+                    <div class="dish-meta">
+                        <span>🍷 Romantic dinners · Events</span>
+                        <button class="hire-btn" data-chef-name="James Carrington" data-chef-specialty="Western Fine Dining" data-chef-exp="18+ years" data-chef-cuisine="Western" data-wa="250799334455">Hire →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chef 4 - Korean-Chinese Fusion -->
+            <div class="dish-card">
+                <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1556912173-3bb406ef21e8?auto=format&fit=crop&w=800&q=80'); background-position: top;">
+                    <span class="dish-cuisine-badge">🌟 Fusion Experts</span>
+                </div>
+                <div class="dish-info">
+                    <div class="dish-header">
+                        <h3>Soo-Jin & Zhao Duo</h3>
+                        <div class="rating">
+                            <i data-lucide="star" size="14" fill="currentColor"></i>
+                            <span>5.0</span>
+                        </div>
+                    </div>
+                    <p class="dish-desc">Dynamic chef duo blending Korean-Chinese fusion. Perfect for larger gatherings and special events.</p>
+                    <div class="dish-meta">
+                        <span>👥 Team of 2 · 15+ guests</span>
+                        <button class="hire-btn" data-chef-name="Soo-Jin & Zhao" data-chef-specialty="Korean-Chinese Fusion" data-chef-exp="12+ years each" data-chef-cuisine="Fusion" data-wa="250712345678">Hire →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chef 5 - Pastry Chef -->
+            <div class="dish-card">
+                <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=800&q=80'); background-position: top;">
+                    <span class="dish-cuisine-badge">🍰 Pastry Chef</span>
+                </div>
+                <div class="dish-info">
+                    <div class="dish-header">
+                        <h3>Maria Chen</h3>
+                        <div class="rating">
+                            <i data-lucide="star" size="14" fill="currentColor"></i>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <p class="dish-desc">Award-winning pastry chef. Creates stunning dessert tables and custom cakes for any celebration.</p>
+                    <div class="dish-meta">
+                        <span>🎂 Cakes · Desserts · Sweets</span>
+                        <button class="hire-btn" data-chef-name="Maria Chen" data-chef-specialty="Pastry Chef" data-chef-exp="10+ years" data-chef-cuisine="Pastry" data-wa="250756789012">Hire →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chef 6 - Healthy Expert -->
+            <div class="dish-card">
+                <div class="dish-img" style="background-image: url('https://images.unsplash.com/photo-1556912173-3bb406ef21e8?auto=format&fit=crop&w=800&q=80'); background-position: top;">
+                    <span class="dish-cuisine-badge">🌱 Plant-Based</span>
+                </div>
+                <div class="dish-info">
+                    <div class="dish-header">
+                        <h3>David Kim</h3>
+                        <div class="rating">
+                            <i data-lucide="star" size="14" fill="currentColor"></i>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <p class="dish-desc">Specializes in gluten-free, vegan, and healthy Korean-Chinese classics without sacrificing flavor.</p>
+                    <div class="dish-meta">
+                        <span>🥗 Healthy · Vegan · Gluten-free</span>
+                        <button class="hire-btn" data-chef-name="David Kim" data-chef-specialty="Healthy Cuisine" data-chef-exp="12+ years" data-chef-cuisine="Plant-Based" data-wa="250734567890">Hire →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="menu-section" style="background: var(--light);">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+            <p style="color: var(--grey);">Everything you need to know</p>
+        </div>
+        <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+            <div class="dish-card faq-item">
+                <div class="faq-question" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 20px 24px; font-weight: 700;">
+                    How do I book a chef?
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
+                </div>
+                <div class="faq-answer" style="max-height: 0; overflow: hidden; padding: 0 24px;">
+                    <p style="padding-bottom: 20px;">Click "Hire" on any chef profile. Fill in your event details in the popup form, and the chef will contact you via WhatsApp within 24 hours.</p>
+                </div>
+            </div>
+
+            <div class="dish-card faq-item">
+                <div class="faq-question" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 20px 24px; font-weight: 700;">
+                    What is the pricing?
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
+                </div>
+                <div class="faq-answer" style="max-height: 0; overflow: hidden; padding: 0 24px;">
+                    <p style="padding-bottom: 20px;">Pricing varies by chef and menu. Expect $30-80 per person for ingredients + chef service fee. Payment via Mobile Money after agreement.</p>
+                </div>
+            </div>
+
+            <div class="dish-card faq-item">
+                <div class="faq-question" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 20px 24px; font-weight: 700;">
+                    Do chefs provide everything?
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
+                </div>
+                <div class="faq-answer" style="max-height: 0; overflow: hidden; padding: 0 24px;">
+                    <p style="padding-bottom: 20px;">Yes! Chefs bring fresh ingredients, equipment, and serving platters. They only need access to your kitchen and prep area.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Yanah — Hire professional chefs for unforgettable dining experiences. Pay via MoMo | WhatsApp inquiries</p>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentChef = null;
+        let currentGuestCount = 4;
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('eventDate').min = today;
+        
+        // Open hiring modal
+        function openHiringModal(chef) {
+            currentChef = chef;
+            currentGuestCount = 4;
+            document.getElementById('selectedChefName').textContent = chef.name;
+            document.getElementById('chefSpecialtyBadge').textContent = chef.specialty;
+            document.getElementById('guestCount').value = currentGuestCount;
+            document.getElementById('hiringModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        
+        // Close modal
+        function closeHiringModal() {
+            document.getElementById('hiringModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('hiringForm').reset();
+            currentGuestCount = 4;
+        }
+        
+        // Change guest count
+        function changeGuests(delta) {
+            let newValue = currentGuestCount + delta;
+            if (newValue >= 1 && newValue <= 100) {
+                currentGuestCount = newValue;
+                document.getElementById('guestCount').value = currentGuestCount;
+            }
+        }
+        
+        // Submit hiring request
+        function submitHiringRequest() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const guestCount = document.getElementById('guestCount').value;
+            const eventDate = document.getElementById('eventDate').value;
+            const eventTime = document.getElementById('eventTime').value;
+            const eventLocation = document.getElementById('eventLocation').value.trim();
+            const eventType = document.getElementById('eventType').value;
+            const specialRequests = document.getElementById('specialRequests').value.trim();
+            
+            // Validation
+            if (!customerName) {
+                alert('Please enter your name');
+                return;
+            }
+            if (!customerPhone) {
+                alert('Please enter your phone number');
+                return;
+            }
+            if (!eventDate) {
+                alert('Please select an event date');
+                return;
+            }
+            if (!eventLocation) {
+                alert('Please enter the event location');
+                return;
+            }
+            
+            // Format date nicely
+            const formattedDate = new Date(eventDate).toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Build WhatsApp message
+            const message = `👨‍🍳 *CHEF HIRING REQUEST - Yanah* 👨‍🍳%0A%0A` +
+                           `*Customer Details:*%0A` +
+                           `👤 Name: ${customerName}%0A` +
+                           `📞 Phone: ${customerPhone}%0A%0A` +
+                           `*Chef Selected:*%0A` +
+                           `🍳 Name: ${currentChef.name}%0A` +
+                           `🏆 Specialty: ${currentChef.specialty}%0A` +
+                           `⭐ Experience: ${currentChef.experience}%0A%0A` +
+                           `*Event Details:*%0A` +
+                           `📅 Date: ${formattedDate}%0A` +
+                           `⏰ Time: ${eventTime}%0A` +
+                           `👥 Number of Guests: ${guestCount}%0A` +
+                           `🏷️ Event Type: ${eventType}%0A` +
+                           `📍 Location: ${eventLocation}%0A%0A`;
+            
+            const finalMessage = specialRequests ? 
+                message + `*Special Requests:*%0A${specialRequests}%0A%0A*Payment:* Mobile Money (MoMo) after agreement%0A%0APlease share your availability and estimated pricing. Thank you!` :
+                message + `*Payment:* Mobile Money (MoMo) after agreement%0A%0APlease share your availability and estimated pricing. Thank you!`;
+            
+            // Send to chef's WhatsApp
+            const whatsappUrl = `https://wa.me/${currentChef.waNumber}?text=${finalMessage}`;
+            
+            closeHiringModal();
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('hiringModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeHiringModal();
+            }
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                if (navLinks.classList.contains('active')) {
+                    mobileMenuBtn.innerHTML = '<i data-lucide="x" size="24"></i>';
+                } else {
+                    mobileMenuBtn.innerHTML = '<i data-lucide="menu" size="24"></i>';
+                }
+                lucide.createIcons();
+            });
+        }
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.innerHTML = '<i data-lucide="menu" size="24"></i>';
+                    lucide.createIcons();
+                }
+            });
+        });
+        
+        // FAQ accordion
+        document.querySelectorAll('.faq-item').forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            const icon = question.querySelector('.faq-icon');
+            
+            question.addEventListener('click', () => {
+                const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+                
+                // Close all FAQs
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    const otherAnswer = otherItem.querySelector('.faq-answer');
+                    const otherIcon = otherItem.querySelector('.faq-icon');
+                    if (otherAnswer) {
+                        otherAnswer.style.maxHeight = '0px';
+                        if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                    }
+                });
+                
+                // Open clicked FAQ if it was closed
+                if (!isOpen) {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    if (icon) icon.style.transform = 'rotate(180deg)';
+                } else {
+                    answer.style.maxHeight = '0px';
+                    if (icon) icon.style.transform = 'rotate(0deg)';
+                }
+            });
+        });
+        
+        // Hire button functionality
+        document.querySelectorAll('.hire-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const chefData = {
+                    name: btn.getAttribute('data-chef-name'),
+                    specialty: btn.getAttribute('data-chef-specialty'),
+                    experience: btn.getAttribute('data-chef-exp'),
+                    cuisine: btn.getAttribute('data-chef-cuisine'),
+                    waNumber: btn.getAttribute('data-wa')
+                };
+                openHiringModal(chefData);
+            });
+        });
+        
+        // Smooth scroll to chefs section
+        const browseBtn = document.getElementById('browseChefsBtn');
+        if (browseBtn) {
+            browseBtn.addEventListener('click', () => {
+                const chefsSection = document.getElementById('chefsSection');
+                if (chefsSection) {
+                    chefsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        }
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            }
+        });
+        
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

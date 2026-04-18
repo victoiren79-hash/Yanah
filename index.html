@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Yanah | Global Flavors Delivered</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-container {
+            background: var(--white);
+            border-radius: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--grey);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .order-summary {
+            background: #FFF1EF;
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .order-summary h4 {
+            font-size: 14px;
+            color: var(--grey);
+            margin-bottom: 8px;
+        }
+        
+        .order-summary p {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 75, 43, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .quantity-btn {
+            background: var(--light);
+            border: 1px solid #e2e8f0;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .quantity-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .quantity-input {
+            width: 80px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px;
+        }
+        
+        .modal-total {
+            background: var(--light);
+            padding: 16px;
+            border-radius: 16px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-total span:first-child {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .modal-total span:last-child {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .btn-cancel {
+            flex: 1;
+            background: var(--light);
+            color: var(--dark);
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-confirm {
+            flex: 1;
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-confirm:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .modal-container {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .modal-header h3 {
+                font-size: 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .modal-total span:last-child {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <a href="index.html" class="logo">Yanah</a>
+        <div class="nav-links">
+            <a href="#" data-cuisine="all" class="cuisine-nav-link active">All Dishes</a>
+            <a href="#" data-cuisine="chinese" class="cuisine-nav-link">Chinese</a>
+            <a href="#" data-cuisine="korean" class="cuisine-nav-link">Korean</a>
+            <a href="#" data-cuisine="western" class="cuisine-nav-link">Western</a>
+            <a href="hiring.html">Hire a Chef</a>
+        </div>
+        <div class="nav-btns">
+            <button class="btn-primary" id="orderCtaBtn">Order Now</button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Chinese · Korean · Western <span>delivered fast.</span></h1>
+            <p>Authentic recipes, fresh ingredients, and a world of flavor — straight to your door. Order in seconds, pay via MoMo.</p>
+            <div class="hero-stats">
+                <div class="stat"><span>50+</span> Dishes</div>
+                <div class="stat"><span>12</span> Master Chefs</div>
+                <div class="stat"><span>30min</span> Avg Delivery</div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" 
+                 alt="Global Cuisine" >
+        </div>
+    </section>
+
+    <!-- Order Modal Popup -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Complete Your Order</h3>
+                <button class="modal-close" onclick="closeOrderModal()">
+                    <i data-lucide="x" size="24"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="order-summary" id="orderSummary">
+                    <h4>Selected Dish</h4>
+                    <p id="selectedDishName">-</p>
+                </div>
+                
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label>Quantity *</label>
+                        <div class="quantity-control">
+                            <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" readonly>
+                            <button type="button" class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Your Name *</label>
+                        <input type="text" id="customerName" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Phone Number (WhatsApp) *</label>
+                        <input type="tel" id="customerPhone" placeholder="e.g., 250788123456" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Delivery Address *</label>
+                        <textarea id="deliveryAddress" placeholder="Street name, building number, landmark, etc." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Preferred Delivery Time</label>
+                        <select id="deliveryTime">
+                            <option value="ASAP">ASAP</option>
+                            <option value="12:00 PM - 1:00 PM">12:00 PM - 1:00 PM</option>
+                            <option value="1:00 PM - 2:00 PM">1:00 PM - 2:00 PM</option>
+                            <option value="2:00 PM - 3:00 PM">2:00 PM - 3:00 PM</option>
+                            <option value="5:00 PM - 6:00 PM">5:00 PM - 6:00 PM</option>
+                            <option value="6:00 PM - 7:00 PM">6:00 PM - 7:00 PM</option>
+                            <option value="7:00 PM - 8:00 PM">7:00 PM - 8:00 PM</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Special Instructions (optional)</label>
+                        <textarea id="specialInstructions" placeholder="Any allergies, spice level, or special requests..."></textarea>
+                    </div>
+                    
+                    <div class="modal-total">
+                        <span>Total Amount:</span>
+                        <span id="totalAmount">$0.00</span>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeOrderModal()">Cancel</button>
+                        <button type="button" class="btn-confirm" onclick="submitOrder()">Confirm Order →</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Menu Section -->
+    <section class="menu-section" id="menuSection">
+        <div class="section-header">
+            <h2>Our Menu</h2>
+            <div class="cuisine-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="chinese">🇨🇳 Chinese</button>
+                <button class="filter-btn" data-filter="korean">🇰🇷 Korean</button>
+                <button class="filter-btn" data-filter="western">🇺🇸 Western</button>
+            </div>
+        </div>
+        <div class="menu-grid" id="menuGrid">
+            <!-- Dynamic content loaded via JS -->
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process-section">
+        <h2>How it works</h2>
+        <div class="process-grid">
+            <div class="process-card">
+                <i data-lucide="shopping-cart"></i>
+                <h3>1. Order</h3>
+                <p>Click "Order" on any dish → Fill in your details in the popup.</p>
+            </div>
+            <div class="process-card">
+                <i data-lucide="smartphone"></i>
+                <h3>2. Confirm via WhatsApp</h3>
+                <p>Your order details will be sent via WhatsApp for confirmation.</p>
+            </div>
+            <div class="process-card">
+                <i data-lucide="wallet"></i>
+                <h3>3. Pay via MoMo</h3>
+                <p>Secure payment through Mobile Money after order confirmation.</p>
+            </div>
+            <div class="process-card">
+                <i data-lucide="bike"></i>
+                <h3>4. Get it delivered</h3>
+                <p>Hot, fresh, and fast — delivered to your doorstep.</p>
+            </div>
+        </div>
+        <div class="hire-note">
+            <i data-lucide="chef-hat"></i>
+            <span>Want a private chef? <a href="hiring.html">Hire a chef →</a> Same WhatsApp process, custom menu & experience.</span>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Yanah — Authentic Chinese, Korean & Western dishes. Order via WhatsApp | Pay with MoMo</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Global variables for modal
+        let currentDish = null;
+        let currentQuantity = 1;
+        
+        // Open modal with dish details
+        function openOrderModal(dish) {
+            currentDish = dish;
+            currentQuantity = 1;
+            document.getElementById('selectedDishName').textContent = `${dish.name} - $${dish.price.toFixed(2)}`;
+            document.getElementById('quantity').value = currentQuantity;
+            updateTotalAmount();
+            document.getElementById('orderModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+        
+        // Close modal
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('orderForm').reset();
+            document.getElementById('quantity').value = 1;
+            currentQuantity = 1;
+        }
+        
+        // Change quantity
+        function changeQuantity(delta) {
+            let newValue = currentQuantity + delta;
+            if (newValue >= 1 && newValue <= 20) {
+                currentQuantity = newValue;
+                document.getElementById('quantity').value = currentQuantity;
+                updateTotalAmount();
+            }
+        }
+        
+        // Update total amount
+        function updateTotalAmount() {
+            if (currentDish) {
+                const total = currentDish.price * currentQuantity;
+                document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+            }
+        }
+        
+        // Submit order and send to WhatsApp
+        function submitOrder() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+            const deliveryTime = document.getElementById('deliveryTime').value;
+            const specialInstructions = document.getElementById('specialInstructions').value.trim();
+            
+            if (!customerName) {
+                alert('Please enter your name');
+                return;
+            }
+            if (!customerPhone) {
+                alert('Please enter your phone number');
+                return;
+            }
+            if (!deliveryAddress) {
+                alert('Please enter your delivery address');
+                return;
+            }
+            
+            const totalAmount = currentDish.price * currentQuantity;
+            const message = `🍽️ *NEW ORDER - Yanah* 🍽️%0A%0A` +
+                           `*Customer Details:*%0A` +
+                           `👤 Name: ${customerName}%0A` +
+                           `📞 Phone: ${customerPhone}%0A%0A` +
+                           `*Order Details:*%0A` +
+                           `🍜 Dish: ${currentDish.name}%0A` +
+                           `🔢 Quantity: ${currentQuantity}%0A` +
+                           `💰 Price: $${currentDish.price.toFixed(2)} each%0A` +
+                           `💵 Total: $${totalAmount.toFixed(2)}%0A%0A` +
+                           `*Delivery Information:*%0A` +
+                           `📍 Address: ${deliveryAddress}%0A` +
+                           `⏰ Time: ${deliveryTime}%0A%0A`;
+            
+            const finalMessage = specialInstructions ? 
+                message + `*Special Instructions:* ${specialInstructions}%0A%0A*Payment:* Mobile Money (MoMo)%0A%0APlease confirm availability. Thank you!` :
+                message + `*Payment:* Mobile Money (MoMo)%0A%0APlease confirm availability. Thank you!`;
+            
+            // CHANGE THIS NUMBER TO YOUR ACTUAL WHATSAPP BUSINESS NUMBER
+            const restaurantNumber = "250792763860";
+            const whatsappUrl = `https://wa.me/${restaurantNumber}?text=${finalMessage}`;
+            
+            closeOrderModal();
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('orderModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeOrderModal();
+            }
+        });
+    </script>
+</body>
+</html>
