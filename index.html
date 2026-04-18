@@ -8,7 +8,274 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Modal Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fffef7;
+            color: #1e1e2a;
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary: #ff4b2b;
+            --primary-dark: #e63e1f;
+            --dark: #1a1a2e;
+            --grey: #5a5a6e;
+            --light: #f8f9fc;
+            --white: #ffffff;
+            --transition: all 0.25s ease;
+        }
+
+        /* Navbar */
+        #navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border-bottom: 1px solid #eee;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            background: linear-gradient(135deg, #ff4b2b, #ff9068);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+        .nav-links a:hover, .cuisine-nav-link.active {
+            color: var(--primary);
+        }
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(255,75,43,0.2);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hero */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 3rem 5%;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero-content h1 span {
+            color: var(--primary);
+        }
+        .hero-content p {
+            color: var(--grey);
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .stat {
+            font-weight: 500;
+        }
+        .stat span {
+            font-weight: 800;
+            font-size: 1.5rem;
+            display: block;
+            color: var(--dark);
+        }
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 32px;
+            object-fit: cover;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+        }
+
+        /* menu section */
+        .menu-section {
+            padding: 4rem 5%;
+            background: #fefaf5;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+        .cuisine-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        .menu-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.12);
+        }
+        .menu-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 1.2rem;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+        .card-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .price {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .cuisine-badge {
+            display: inline-block;
+            background: #f0f0f0;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        .order-btn-small {
+            width: 100%;
+            margin-top: 1rem;
+            background: var(--dark);
+            border: none;
+            padding: 0.7rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .order-btn-small:hover {
+            background: var(--primary);
+        }
+
+        /* Process */
+        .process-section {
+            padding: 4rem 5%;
+            background: var(--white);
+            text-align: center;
+        }
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .process-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 28px;
+        }
+        .process-card i {
+            color: var(--primary);
+            width: 48px;
+            height: 48px;
+        }
+        .hire-note {
+            background: #fff1ef;
+            padding: 1rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .hire-note a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #1e1e2a;
+            color: #bbb;
+            font-size: 0.85rem;
+        }
+
+        /* Modal Styles (unchanged from original but enhanced) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -23,11 +290,9 @@
             align-items: center;
             animation: fadeIn 0.3s ease;
         }
-        
         .modal-overlay.active {
             display: flex;
         }
-        
         .modal-container {
             background: var(--white);
             border-radius: 32px;
@@ -38,23 +303,14 @@
             animation: slideUp 0.3s ease;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
         @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        
         .modal-header {
             padding: 24px 24px 16px;
             border-bottom: 1px solid #e2e8f0;
@@ -62,13 +318,11 @@
             justify-content: space-between;
             align-items: center;
         }
-        
         .modal-header h3 {
             font-size: 24px;
             font-weight: 800;
             color: var(--dark);
         }
-        
         .modal-close {
             background: none;
             border: none;
@@ -80,40 +334,33 @@
             align-items: center;
             justify-content: center;
         }
-        
         .modal-close:hover {
             color: var(--primary);
             transform: rotate(90deg);
         }
-        
         .modal-body {
             padding: 24px;
         }
-        
         .order-summary {
             background: #FFF1EF;
             padding: 16px;
             border-radius: 16px;
             margin-bottom: 24px;
         }
-        
         .order-summary h4 {
             font-size: 14px;
             color: var(--grey);
             margin-bottom: 8px;
         }
-        
         .order-summary p {
             font-size: 18px;
             font-weight: 700;
             color: var(--dark);
             margin: 0;
         }
-        
         .form-group {
             margin-bottom: 20px;
         }
-        
         .form-group label {
             display: block;
             font-size: 14px;
@@ -121,7 +368,6 @@
             margin-bottom: 8px;
             color: var(--dark);
         }
-        
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -133,7 +379,6 @@
             font-family: 'Inter', sans-serif;
             transition: var(--transition);
         }
-        
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -141,18 +386,11 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(255, 75, 43, 0.1);
         }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
         .quantity-control {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
         .quantity-btn {
             background: var(--light);
             border: 1px solid #e2e8f0;
@@ -164,13 +402,11 @@
             font-weight: 600;
             transition: var(--transition);
         }
-        
         .quantity-btn:hover {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
-        
         .quantity-input {
             width: 80px;
             text-align: center;
@@ -180,7 +416,6 @@
             border-radius: 12px;
             padding: 8px;
         }
-        
         .modal-total {
             background: var(--light);
             padding: 16px;
@@ -190,24 +425,16 @@
             justify-content: space-between;
             align-items: center;
         }
-        
-        .modal-total span:first-child {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
         .modal-total span:last-child {
             font-size: 24px;
             font-weight: 800;
             color: var(--primary);
         }
-        
         .modal-buttons {
             display: flex;
             gap: 12px;
             margin-top: 24px;
         }
-        
         .btn-cancel {
             flex: 1;
             background: var(--light);
@@ -217,13 +444,7 @@
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
         }
-        
-        .btn-cancel:hover {
-            background: #e2e8f0;
-        }
-        
         .btn-confirm {
             flex: 1;
             background: var(--dark);
@@ -235,36 +456,22 @@
             cursor: pointer;
             transition: var(--transition);
         }
-        
         .btn-confirm:hover {
             background: var(--primary);
             transform: translateY(-2px);
         }
-        
         @media (max-width: 768px) {
-            .modal-container {
-                width: 95%;
-                max-height: 90vh;
-            }
-            
-            .modal-header h3 {
-                font-size: 20px;
-            }
-            
-            .modal-body {
-                padding: 20px;
-            }
-            
-            .modal-total span:last-child {
-                font-size: 20px;
-            }
+            .nav-links { gap: 1rem; }
+            .hero-content h1 { font-size: 2rem; }
+            .hero { flex-direction: column; text-align: center; }
+            .hero-stats { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
     <nav id="navbar">
-        <a href="index.html" class="logo">Yanah</a>
+        <a href="#" class="logo">Yanah</a>
         <div class="nav-links">
             <a href="#" data-cuisine="all" class="cuisine-nav-link active">All Dishes</a>
             <a href="#" data-cuisine="chinese" class="cuisine-nav-link">Chinese</a>
@@ -273,6 +480,7 @@
             <a href="hiring.html">Hire a Chef</a>
         </div>
         <div class="nav-btns">
+            <!-- ORDER NOW BUTTON - scrolls to menu section -->
             <button class="btn-primary" id="orderCtaBtn">Order Now</button>
         </div>
     </nav>
@@ -289,81 +497,9 @@
         </div>
         <div class="hero-image">
             <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" 
-                 alt="Global Cuisine" >
+                 alt="Global Cuisine">
         </div>
     </section>
-
-    <!-- Order Modal Popup -->
-    <div class="modal-overlay" id="orderModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3>Complete Your Order</h3>
-                <button class="modal-close" onclick="closeOrderModal()">
-                    <i data-lucide="x" size="24"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="order-summary" id="orderSummary">
-                    <h4>Selected Dish</h4>
-                    <p id="selectedDishName">-</p>
-                </div>
-                
-                <form id="orderForm">
-                    <div class="form-group">
-                        <label>Quantity *</label>
-                        <div class="quantity-control">
-                            <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">-</button>
-                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" readonly>
-                            <button type="button" class="quantity-btn" onclick="changeQuantity(1)">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Your Name *</label>
-                        <input type="text" id="customerName" placeholder="Enter your full name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Phone Number (WhatsApp) *</label>
-                        <input type="tel" id="customerPhone" placeholder="e.g., 250788123456" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Delivery Address *</label>
-                        <textarea id="deliveryAddress" placeholder="Street name, building number, landmark, etc." required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Preferred Delivery Time</label>
-                        <select id="deliveryTime">
-                            <option value="ASAP">ASAP</option>
-                            <option value="12:00 PM - 1:00 PM">12:00 PM - 1:00 PM</option>
-                            <option value="1:00 PM - 2:00 PM">1:00 PM - 2:00 PM</option>
-                            <option value="2:00 PM - 3:00 PM">2:00 PM - 3:00 PM</option>
-                            <option value="5:00 PM - 6:00 PM">5:00 PM - 6:00 PM</option>
-                            <option value="6:00 PM - 7:00 PM">6:00 PM - 7:00 PM</option>
-                            <option value="7:00 PM - 8:00 PM">7:00 PM - 8:00 PM</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Special Instructions (optional)</label>
-                        <textarea id="specialInstructions" placeholder="Any allergies, spice level, or special requests..."></textarea>
-                    </div>
-                    
-                    <div class="modal-total">
-                        <span>Total Amount:</span>
-                        <span id="totalAmount">$0.00</span>
-                    </div>
-                    
-                    <div class="modal-buttons">
-                        <button type="button" class="btn-cancel" onclick="closeOrderModal()">Cancel</button>
-                        <button type="button" class="btn-confirm" onclick="submitOrder()">Confirm Order →</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Dynamic Menu Section -->
     <section class="menu-section" id="menuSection">
@@ -385,26 +521,10 @@
     <section class="process-section">
         <h2>How it works</h2>
         <div class="process-grid">
-            <div class="process-card">
-                <i data-lucide="shopping-cart"></i>
-                <h3>1. Order</h3>
-                <p>Click "Order" on any dish → Fill in your details in the popup.</p>
-            </div>
-            <div class="process-card">
-                <i data-lucide="smartphone"></i>
-                <h3>2. Confirm via WhatsApp</h3>
-                <p>Your order details will be sent via WhatsApp for confirmation.</p>
-            </div>
-            <div class="process-card">
-                <i data-lucide="wallet"></i>
-                <h3>3. Pay via MoMo</h3>
-                <p>Secure payment through Mobile Money after order confirmation.</p>
-            </div>
-            <div class="process-card">
-                <i data-lucide="bike"></i>
-                <h3>4. Get it delivered</h3>
-                <p>Hot, fresh, and fast — delivered to your doorstep.</p>
-            </div>
+            <div class="process-card"><i data-lucide="shopping-cart"></i><h3>1. Order</h3><p>Click "Order" on any dish → Fill in your details in the popup.</p></div>
+            <div class="process-card"><i data-lucide="smartphone"></i><h3>2. Confirm via WhatsApp</h3><p>Your order details will be sent via WhatsApp for confirmation.</p></div>
+            <div class="process-card"><i data-lucide="wallet"></i><h3>3. Pay via MoMo</h3><p>Secure payment through Mobile Money after order confirmation.</p></div>
+            <div class="process-card"><i data-lucide="bike"></i><h3>4. Get it delivered</h3><p>Hot, fresh, and fast — delivered to your doorstep.</p></div>
         </div>
         <div class="hire-note">
             <i data-lucide="chef-hat"></i>
@@ -416,14 +536,131 @@
         <p>© 2026 Yanah — Authentic Chinese, Korean & Western dishes. Order via WhatsApp | Pay with MoMo</p>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Order Modal Popup -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Complete Your Order</h3>
+                <button class="modal-close" onclick="closeOrderModal()"><i data-lucide="x" size="24"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="order-summary" id="orderSummary"><h4>Selected Dish</h4><p id="selectedDishName">-</p></div>
+                <form id="orderForm">
+                    <div class="form-group"><label>Quantity *</label><div class="quantity-control"><button type="button" class="quantity-btn" onclick="changeQuantity(-1)">-</button><input type="number" id="quantity" class="quantity-input" value="1" min="1" readonly><button type="button" class="quantity-btn" onclick="changeQuantity(1)">+</button></div></div>
+                    <div class="form-group"><label>Your Name *</label><input type="text" id="customerName" placeholder="Enter your full name" required></div>
+                    <div class="form-group"><label>Phone Number (WhatsApp) *</label><input type="tel" id="customerPhone" placeholder="e.g., 250788123456" required></div>
+                    <div class="form-group"><label>Delivery Address *</label><textarea id="deliveryAddress" placeholder="Street name, building number, landmark, etc." required></textarea></div>
+                    <div class="form-group"><label>Preferred Delivery Time</label><select id="deliveryTime"><option value="ASAP">ASAP</option><option value="12:00 PM - 1:00 PM">12:00 PM - 1:00 PM</option><option value="1:00 PM - 2:00 PM">1:00 PM - 2:00 PM</option><option value="2:00 PM - 3:00 PM">2:00 PM - 3:00 PM</option><option value="5:00 PM - 6:00 PM">5:00 PM - 6:00 PM</option><option value="6:00 PM - 7:00 PM">6:00 PM - 7:00 PM</option><option value="7:00 PM - 8:00 PM">7:00 PM - 8:00 PM</option></select></div>
+                    <div class="form-group"><label>Special Instructions (optional)</label><textarea id="specialInstructions" placeholder="Any allergies, spice level, or special requests..."></textarea></div>
+                    <div class="modal-total"><span>Total Amount:</span><span id="totalAmount">$0.00</span></div>
+                    <div class="modal-buttons"><button type="button" class="btn-cancel" onclick="closeOrderModal()">Cancel</button><button type="button" class="btn-confirm" onclick="submitOrder()">Confirm Order →</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Global variables for modal
+        // ------------------------------
+        // 1. SCROLL TO MENU ON "ORDER NOW" CLICK (main requirement)
+        // ------------------------------
+        const orderNowBtn = document.getElementById('orderCtaBtn');
+        const menuSection = document.getElementById('menuSection');
+        
+        if (orderNowBtn && menuSection) {
+            orderNowBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Smooth scroll to menu section
+                menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Optional: add a subtle highlight effect to menu header
+                const menuHeader = document.querySelector('.section-header h2');
+                if (menuHeader) {
+                    menuHeader.style.transition = '0.3s';
+                    menuHeader.style.color = '#ff4b2b';
+                    setTimeout(() => { menuHeader.style.color = ''; }, 800);
+                }
+            });
+        }
+        
+        // Also all "Order Now" buttons inside each dish card will use the modal flow.
+        // But main hero/nav order now triggers smooth scroll to menu.
+        
+        // ------------------------------
+        // MENU DATA & RENDERING
+        // ------------------------------
+        const menuData = [
+            { id: 1, name: "Kung Pao Chicken", cuisine: "chinese", price: 12.99, img: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=80", desc: "Spicy & nutty" },
+            { id: 2, name: "Mapo Tofu", cuisine: "chinese", price: 11.49, img: "https://images.unsplash.com/photo-1588166524941-3bf61a9c34db?auto=format&fit=crop&w=400&q=80", desc: "Silky tofu & minced pork" },
+            { id: 3, name: "Kimchi Jjigae", cuisine: "korean", price: 13.99, img: "https://images.unsplash.com/photo-1617098900591-3d4f9c4c5b6c?auto=format&fit=crop&w=400&q=80", desc: "Kimchi stew with tofu" },
+            { id: 4, name: "Bibimbap", cuisine: "korean", price: 14.49, img: "https://images.unsplash.com/photo-1590301157890-4810ed3529c8?auto=format&fit=crop&w=400&q=80", desc: "Mixed rice & veggies" },
+            { id: 5, name: "Classic Burger", cuisine: "western", price: 10.99, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80", desc: "Beef patty, cheese, lettuce" },
+            { id: 6, name: "Grilled Steak", cuisine: "western", price: 22.99, img: "https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=400&q=80", desc: "Juicy sirloin with herbs" },
+            { id: 7, name: "Fried Rice", cuisine: "chinese", price: 9.99, img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=80", desc: "Eggs, peas, carrots" },
+            { id: 8, name: "Korean Fried Chicken", cuisine: "korean", price: 15.99, img: "https://images.unsplash.com/photo-1604908177453-7462950a6a9a?auto=format&fit=crop&w=400&q=80", desc: "Sweet & spicy glaze" }
+        ];
+        
+        let activeFilter = "all";
+        
+        function renderMenu() {
+            const grid = document.getElementById('menuGrid');
+            if (!grid) return;
+            const filtered = activeFilter === "all" ? menuData : menuData.filter(item => item.cuisine === activeFilter);
+            grid.innerHTML = filtered.map(dish => `
+                <div class="menu-card" data-dish-id="${dish.id}">
+                    <img src="${dish.img}" alt="${dish.name}" loading="lazy">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3>${dish.name}</h3>
+                            <span class="price">$${dish.price.toFixed(2)}</span>
+                        </div>
+                        <p style="font-size:0.85rem; color:#5a5a6e;">${dish.desc}</p>
+                        <span class="cuisine-badge">${dish.cuisine.toUpperCase()}</span>
+                        <button class="order-btn-small" data-dish='${JSON.stringify(dish)}'>Order Now →</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Attach order events to each small order button
+            document.querySelectorAll('.order-btn-small').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const dishData = JSON.parse(btn.getAttribute('data-dish'));
+                    openOrderModal(dishData);
+                });
+            });
+        }
+        
+        // filter buttons logic
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeFilter = btn.getAttribute('data-filter');
+                renderMenu();
+            });
+        });
+        
+        // nav cuisine links sync with filter (bonus UX)
+        document.querySelectorAll('.cuisine-nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const cuisine = link.getAttribute('data-cuisine');
+                if (cuisine === "all") activeFilter = "all";
+                else activeFilter = cuisine;
+                // update filter buttons active state
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if(btn.getAttribute('data-filter') === activeFilter) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                });
+                renderMenu();
+                menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        
+        // MODAL LOGIC
         let currentDish = null;
         let currentQuantity = 1;
         
-        // Open modal with dish details
-        function openOrderModal(dish) {
+        window.openOrderModal = function(dish) {
             currentDish = dish;
             currentQuantity = 1;
             document.getElementById('selectedDishName').textContent = `${dish.name} - $${dish.price.toFixed(2)}`;
@@ -431,31 +668,26 @@
             updateTotalAmount();
             document.getElementById('orderModal').classList.add('active');
             document.body.style.overflow = 'hidden';
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        };
         
-        // Close modal
-        function closeOrderModal() {
+        window.closeOrderModal = function() {
             document.getElementById('orderModal').classList.remove('active');
             document.body.style.overflow = 'auto';
             document.getElementById('orderForm').reset();
             document.getElementById('quantity').value = 1;
             currentQuantity = 1;
-        }
+        };
         
-        // Change quantity
-        function changeQuantity(delta) {
+        window.changeQuantity = function(delta) {
             let newValue = currentQuantity + delta;
             if (newValue >= 1 && newValue <= 20) {
                 currentQuantity = newValue;
                 document.getElementById('quantity').value = currentQuantity;
                 updateTotalAmount();
             }
-        }
+        };
         
-        // Update total amount
         function updateTotalAmount() {
             if (currentDish) {
                 const total = currentDish.price * currentQuantity;
@@ -463,26 +695,16 @@
             }
         }
         
-        // Submit order and send to WhatsApp
-        function submitOrder() {
+        window.submitOrder = function() {
             const customerName = document.getElementById('customerName').value.trim();
             const customerPhone = document.getElementById('customerPhone').value.trim();
             const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
             const deliveryTime = document.getElementById('deliveryTime').value;
             const specialInstructions = document.getElementById('specialInstructions').value.trim();
             
-            if (!customerName) {
-                alert('Please enter your name');
-                return;
-            }
-            if (!customerPhone) {
-                alert('Please enter your phone number');
-                return;
-            }
-            if (!deliveryAddress) {
-                alert('Please enter your delivery address');
-                return;
-            }
+            if (!customerName) { alert('Please enter your name'); return; }
+            if (!customerPhone) { alert('Please enter your phone number'); return; }
+            if (!deliveryAddress) { alert('Please enter your delivery address'); return; }
             
             const totalAmount = currentDish.price * currentQuantity;
             const message = `🍽️ *NEW ORDER - Yanah* 🍽️%0A%0A` +
@@ -502,20 +724,27 @@
                 message + `*Special Instructions:* ${specialInstructions}%0A%0A*Payment:* Mobile Money (MoMo)%0A%0APlease confirm availability. Thank you!` :
                 message + `*Payment:* Mobile Money (MoMo)%0A%0APlease confirm availability. Thank you!`;
             
-            // CHANGE THIS NUMBER TO YOUR ACTUAL WHATSAPP BUSINESS NUMBER
             const restaurantNumber = "250792763860";
             const whatsappUrl = `https://wa.me/${restaurantNumber}?text=${finalMessage}`;
-            
             closeOrderModal();
             window.open(whatsappUrl, '_blank');
-        }
+        };
         
-        // Close modal when clicking outside
         document.getElementById('orderModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeOrderModal();
-            }
+            if (e.target === this) closeOrderModal();
         });
+        
+        // initialize menu and icons
+        renderMenu();
+        setTimeout(() => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }, 100);
+        
+        // extra: ensure any existing 'orderCtaBtn' also has menu scroll (already done)
+        // Also, any global "Order Now" from hero section is covered. For safety add fallback
+        if(orderNowBtn) {
+            // prevent any double binding but it's fine
+        }
     </script>
 </body>
 </html>
