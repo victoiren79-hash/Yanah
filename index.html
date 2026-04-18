@@ -516,15 +516,6 @@
                 closeOrderModal();
             }
         });
-
-        // =============================================
-        // THE ONLY CHANGE: Make Order Now button scroll to menu section
-        // =============================================
-        document.getElementById('orderCtaBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            const menuSection = document.getElementById('menuSection');
-            menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
     </script>
 </body>
 </html>
